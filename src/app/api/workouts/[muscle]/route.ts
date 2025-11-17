@@ -45,8 +45,9 @@ function candidatesForSlug(slug: string): string[] {
   return Array.from(list);
 }
 
-export async function GET(_req: NextRequest, { params }: { params: { muscle: string } }) {
-  const slug = (params.muscle || "").toLowerCase();
+export async function GET(_req: NextRequest, context: { params: Promise<{ muscle: string }> }) {
+  const { muscle } = await context.params;
+  const slug = (muscle || "").toLowerCase();
   const base = path.join(process.cwd(), "WorkoutVideos");
 
   // Gather from multiple folders

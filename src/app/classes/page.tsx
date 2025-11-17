@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
@@ -184,7 +183,7 @@ export default function ClassesPage() {
                 <input value={date} onChange={(e) => setDate(e.target.value)} type="date" className="mt-2 w-full rounded-md bg-black/40 px-3 py-2 text-sm outline-none border border-white/10 focus:border-blue-500 focus:ring-1 focus:ring-blue-500" />
               </div>
               {!user && (
-                <p className="text-xs text-amber-300">You must log in to confirm booking. You'll be redirected.</p>
+                <p className="text-xs text-amber-300">You must log in to confirm booking. You’ll be redirected.</p>
               )}
               <div className="flex gap-3">
                 <button onClick={() => setOpen(null)} className="flex-1 rounded-md border border-white/20 px-4 py-2 text-sm hover:bg-white/10">Cancel</button>

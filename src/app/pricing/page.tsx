@@ -140,10 +140,10 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* What's Included */}
+      {/* What’s Included */}
       <section className="pb-20">
         <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-center text-3xl sm:text-4xl font-extrabold">What's Included</h2>
+          <h2 className="text-center text-3xl sm:text-4xl font-extrabold">What’s Included</h2>
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
               <h3 className="text-xl font-semibold">All Plans Include</h3>

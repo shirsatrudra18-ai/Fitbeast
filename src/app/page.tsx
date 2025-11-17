@@ -190,7 +190,6 @@ export default function Home() {
           <p className="mt-3 text-lg text-gray-200">Join FitBeast today and get 7 days free!</p>
           <div className="mt-8">
             {/* Client button opens success popup and records trial */}
-            {/* @ts-expect-error Server Component to Client Component boundary */}
             <JoinFreeTrialButton />
           </div>
         </div>

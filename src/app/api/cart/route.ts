@@ -2,12 +2,16 @@ import { NextResponse } from "next/server";
 import { getDb, persist } from "@/lib/sql";
 import { getAuthUser } from "@/lib/auth";
 
+type CartRow = {
+  id?: number;
+};
+
 export async function GET() {
   const user = await getAuthUser();
   if (!user) return NextResponse.json({ items: [] });
   const db = await getDb();
-  const cartRow = db.prepare("SELECT id FROM carts WHERE user_id = ?").getAsObject([user.id]) as any;
-  if (!cartRow || !cartRow.id) return NextResponse.json({ items: [] });
+  const cartRow = db.prepare("SELECT id FROM carts WHERE user_id = ?").getAsObject([user.id]) as CartRow;
+  if (!cartRow.id) return NextResponse.json({ items: [] });
   const rows = db.exec(
     `SELECT product_id, name, price, image, category, qty FROM cart_items WHERE cart_id = ${Number(
       cartRow.id
@@ -29,14 +33,14 @@ export async function PUT(req: Request) {
   const db = await getDb();
   // ensure cart
   let cartId: number;
-  const row = db.prepare("SELECT id FROM carts WHERE user_id = ?").getAsObject([user.id]) as any;
-  if (row && row.id) {
+  const row = db.prepare("SELECT id FROM carts WHERE user_id = ?").getAsObject([user.id]) as CartRow;
+  if (row.id) {
     cartId = Number(row.id);
   } else {
     const ins = db.prepare("INSERT INTO carts (user_id) VALUES (?)");
     ins.run([user.id]);
     ins.free();
-    const c2 = db.prepare("SELECT id FROM carts WHERE user_id = ?").getAsObject([user.id]) as any;
+    const c2 = db.prepare("SELECT id FROM carts WHERE user_id = ?").getAsObject([user.id]) as CartRow;
     cartId = Number(c2.id);
   }
   // replace items
@@ -64,8 +68,8 @@ export async function DELETE() {
   const user = await getAuthUser();
   if (!user) return NextResponse.json({ ok: true });
   const db = await getDb();
-  const row = db.prepare("SELECT id FROM carts WHERE user_id = ?").getAsObject([user.id]) as any;
-  if (row && row.id) db.exec(`DELETE FROM cart_items WHERE cart_id = ${Number(row.id)}`);
+  const row = db.prepare("SELECT id FROM carts WHERE user_id = ?").getAsObject([user.id]) as CartRow;
+  if (row.id) db.exec(`DELETE FROM cart_items WHERE cart_id = ${Number(row.id)}`);
   persist(db);
   return NextResponse.json({ ok: true });
 }

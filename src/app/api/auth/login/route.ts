@@ -3,19 +3,28 @@ import { getDb } from "@/lib/sql";
 import bcrypt from "bcryptjs";
 import { setAuthCookie, clearAuthCookie, getAuthUser } from "@/lib/auth";
 
+type UserRow = {
+  id?: number;
+  name?: string | null;
+  email?: string;
+  password_hash?: string;
+};
+
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { email, password } = body || {};
   if (!email || !password) return NextResponse.json({ error: "Missing fields" }, { status: 400 });
 
   const db = await getDb();
-  const row = db.prepare("SELECT id, name, email, password_hash FROM users WHERE email = ?").getAsObject([email]) as any;
-  if (!row || !row.id) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+  const row = db
+    .prepare("SELECT id, name, email, password_hash FROM users WHERE email = ?")
+    .getAsObject([email]) as UserRow;
+  if (!row.id) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
 
   const ok = await bcrypt.compare(password, String(row.password_hash));
   if (!ok) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
 
-  await setAuthCookie({ id: Number(row.id), email: String(row.email), name: (row.name as any) || undefined });
+  await setAuthCookie({ id: Number(row.id), email: String(row.email), name: row.name ?? undefined });
   return NextResponse.json({ ok: true, user: { id: row.id, name: row.name, email: row.email } });
 }
 

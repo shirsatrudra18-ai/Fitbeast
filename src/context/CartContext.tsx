@@ -36,7 +36,6 @@ type CartContextValue = {
 };
 
 const CartCtx = createContext<CartContextValue | null>(null);
-const STORAGE_KEY = "fb_cart_v1";
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<CartState>({ items: [] });

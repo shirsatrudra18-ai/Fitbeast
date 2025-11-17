@@ -66,7 +66,6 @@ function useLocalStorage<T>(key: string, initial: T) {
       const raw = localStorage.getItem(key);
       if (raw) setState(JSON.parse(raw));
     } catch {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
   useEffect(() => {
     try {
@@ -297,7 +296,6 @@ export default function ProgramsPage() {
       } catch {}
     };
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, level]);
 
   const plan = useMemo(() => buildProgram(level), [level]);

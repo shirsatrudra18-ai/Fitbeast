@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
 
@@ -9,7 +10,7 @@ const PLANS: Record<string, { name: string; price: number; features: string[] }>
   elite: { name: "Elite", price: 149, features: ["Everything in Pro", "Weekly 1-on-1", "Custom plans"] },
 };
 
-export default function PaymentPage() {
+function PaymentContent() {
   const sp = useSearchParams();
   const router = useRouter();
   const { user } = useAuth();
@@ -57,5 +58,19 @@ export default function PaymentPage() {
         </aside>
       </section>
     </main>
+  );
+}
+
+export default function PaymentPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen pb-16 flex items-center justify-center">
+          <p className="text-gray-300">Loading checkout…</p>
+        </main>
+      }
+    >
+      <PaymentContent />
+    </Suspense>
   );
 }

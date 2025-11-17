@@ -16,14 +16,14 @@ export function sign(payload: object) {
   return `${body}.${sig}`;
 }
 
-export function verify(token: string | undefined | null): any | null {
+export function verify<T = unknown>(token: string | undefined | null): T | null {
   if (!token) return null;
   const [body, sig] = token.split(".");
   if (!body || !sig) return null;
   const expected = crypto.createHmac("sha256", getSecret()).update(body).digest("base64url");
   if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
   try {
-    return JSON.parse(Buffer.from(body, "base64url").toString("utf8"));
+    return JSON.parse(Buffer.from(body, "base64url").toString("utf8")) as T;
   } catch {
     return null;
   }
@@ -43,7 +43,7 @@ export async function clearAuthCookie() {
 export async function getAuthUser(): Promise<SessionUser | null> {
   const ck = await cookies();
   const token = ck.get(COOKIE_NAME)?.value;
-  const parsed = verify(token);
+  const parsed = verify<SessionUser>(token);
   if (!parsed) return null;
-  return parsed as SessionUser;
+  return parsed;
 }

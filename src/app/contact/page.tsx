@@ -25,13 +25,13 @@ export default function ContactPage() {
 
       <section className="pt-14 text-center">
         <h1 className="text-5xl sm:text-6xl font-extrabold">Get In Touch</h1>
-        <p className="mt-3 text-gray-300">We'd love to hear from you. Reach out anytime!</p>
+        <p className="mt-3 text-gray-300">We’d love to hear from you. Reach out anytime!</p>
       </section>
 
       <section className="mt-10 px-4">
         <div className="mx-auto max-w-2xl rounded-2xl border border-blue-500/40 bg-black/40 p-6 sm:p-8 shadow-[0_0_60px_-20px_rgba(37,99,235,0.65)] ring-1 ring-white/5">
           <h2 className="text-2xl font-extrabold">Send Us a Message</h2>
-          <p className="mt-1 text-sm text-gray-300">Fill out the form below and we'll get back to you within 24 hours</p>
+          <p className="mt-1 text-sm text-gray-300">Fill out the form below and we’ll get back to you within 24 hours</p>
 
           <form onSubmit={onSubmit} className="mt-6 space-y-5">
             <div>

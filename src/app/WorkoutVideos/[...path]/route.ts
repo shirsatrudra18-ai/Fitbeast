@@ -3,8 +3,8 @@ import { promises as fs } from "fs";
 import path from "path";
 
 // Streams files from the local WorkoutVideos directory
-export async function GET(req: NextRequest, { params }: { params: { path: string[] } }) {
-  const segments = params.path || [];
+export async function GET(req: NextRequest, context: { params: Promise<{ path: string[] }> }) {
+  const { path: segments = [] } = await context.params;
   // Prevent path traversal
   const safe = segments.filter((s) => /^[\w\-\. ]+$/.test(s));
   const base = path.join(process.cwd(), "WorkoutVideos");
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest, { params }: { params: { path: string
         : "application/octet-stream";
 
     const data = await fs.readFile(filePath);
-    return new Response(data, {
+    return new Response(new Uint8Array(data), {
       status: 200,
       headers: {
         "Content-Type": type,
